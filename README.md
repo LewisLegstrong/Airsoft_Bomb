@@ -31,7 +31,7 @@ First things first: this project will use timers, buzzers, buttons and LEDs as t
 
 From a past experience using the ESP32 as a microcontroller, and creating code for it with ESP-IDF, I know I
 
-![NodeMCU ESP32 pinout](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.instructables.com%2FESP32-Internal-Details-and-Pinout%2F&psig=AOvVaw1wFCY6qIgE8HKRVq_NJquY&ust=1709749355577000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJDsjOre3YQDFQAAAAAdAAAAABAX)
+![NodeMCU ESP32 pinout](https://www.twinschip.com/image/catalog/Products%20Twins%20Chip%20Store%202020/ESP32%20ESP-WROOM-32%20Development%20Board%20/ESP32%20ESP-WROOM-32%20Development%20Board%20%20-%20Twins%20Chip%20D.jpg)
 
 ---
 
