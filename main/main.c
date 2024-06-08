@@ -10,6 +10,13 @@
 
 #include "driver/gpio.h"
 #include "driver/ledc.h"
+#include "driver/uart.h"
+
+#define UART_NUM UART_NUM_0
+#define UART_TX_PIN GPIO_NUM_1
+#define UART_RX_PIN GPIO_NUM_3
+#define UART_BAUD_RATE 115200
+
 
 #define PWM_FREQUENCY 2000 // PWM signal frequency in Hz
 #define PWM_DUTY 50		   // PWM duty cycle in percentage (0-100)
@@ -27,7 +34,7 @@ void task_user_input() {
 		io_conf.pull_up_en = 0;// disable pull-up mode
 	gpio_config(&io_conf);	// configure GPIO with the given settings
 	while(1){
-		if (!gpio_get_level(GPIO_NUM_39)){
+		if (gpio_get_level(GPIO_NUM_39)){
 			printf("Button pressed\n");
 		}
 		vTaskDelay(10 / portTICK_PERIOD_MS);
@@ -84,6 +91,29 @@ void pwm_task(void *arg){
 	}
 }
 
+void uart_task(void *arg) {
+	uart_config_t uart_config = {
+		.baud_rate = UART_BAUD_RATE,
+		.data_bits = UART_DATA_8_BITS,
+		.parity = UART_PARITY_DISABLE,
+		.stop_bits = UART_STOP_BITS_1,
+		.flow_ctrl = UART_HW_FLOWCTRL_DISABLE
+	};
+	uart_param_config(UART_NUM, &uart_config);
+	uart_set_pin(UART_NUM, UART_TX_PIN, UART_RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+	uart_driver_install(UART_NUM, 1024, 0, 0, NULL, 0);
+
+	uint8_t data;
+	while (1) {
+		if (uart_read_bytes(UART_NUM, &data, 1, 0) > 0) {
+			// Process received data
+			printf("Received: %c\n", data);
+		}
+		vTaskDelay(10 / portTICK_PERIOD_MS);
+	}
+}
+
+
 void app_main(void)
 {
 	round_timer_t roundTime;
@@ -91,5 +121,6 @@ void app_main(void)
 	xTaskCreate(task_user_time, "task_user_time", 2048, &roundTime, 5, NULL);
 	xTaskCreate(task_user_input, "task_user_input", 2048, NULL, 5, NULL);
 	xTaskCreate(pwm_task, "pwm_task", 2048, NULL, 5, NULL);
+	xTaskCreate(uart_task, "uart_task", 2048, NULL, 5, NULL);
 }
 
