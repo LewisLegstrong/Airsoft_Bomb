@@ -1,7 +1,6 @@
 #include "gpio.h"
 
-void gpioSetup(uint8_t pin, gpio_mode_t mode, gpio_pull_mode_t pull, gpio_int_type_t intr_type)
-{
+void gpioSetup(uint8_t pin, gpio_mode_t mode, gpio_pull_mode_t pull, gpio_int_type_t intr_type) {
 	gpio_config_t io_conf = {};
 	io_conf.intr_type = intr_type;		  // disable interrupt
 	io_conf.mode = mode;				  // set as output mode
@@ -11,13 +10,10 @@ void gpioSetup(uint8_t pin, gpio_mode_t mode, gpio_pull_mode_t pull, gpio_int_ty
 	gpio_config(&io_conf);				  // configure GPIO with the given settings
 }
 
-void task_user_input()
-{
+void task_user_input() {
 	gpioSetup(GPIO_NUM_39, GPIO_MODE_INPUT, GPIO_PULLUP_ONLY, GPIO_INTR_POSEDGE);
-	while (1)
-	{
-		if (gpio_get_level(GPIO_NUM_39))
-		{
+	while (1) {
+		if (gpio_get_level(GPIO_NUM_39)) {
 			printf("Button pressed\n");
 		}
 		vTaskDelay(10 / portTICK_PERIOD_MS);
