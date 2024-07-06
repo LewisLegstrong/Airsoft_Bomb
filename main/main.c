@@ -11,11 +11,24 @@
 #include "timer.h"
 
 void app_main(void) {
-	round_timer_t roundTime;
-	roundTime.round_time_s = 5;
-	xTaskCreate(task_user_time, "task_user_time", 2048, &roundTime, 5, NULL);
-	xTaskCreate(task_user_input, "task_user_input", 2048, NULL, 5, NULL);
-	xTaskCreate(pwm_task, "pwm_task", 2048, NULL, 5, NULL);
-	xTaskCreate(uart_task, "uart_task", 2048, NULL, 5, NULL);
-}
+	//Setup, starting GPIO and Timers alike
+	// gpioSetup(GPIO_NUM_13, GPIO_MODE_INPUT, GPIO_PULLDOWN_ONLY, GPIO_INTR_DISABLE)
+	int isButPressed = 0;
+	TaskHandle_t x_pwmHandle = NULL;
+	gpioSetup(GPIO_NUM_4, GPIO_MODE_INPUT, GPIO_PULLUP_ONLY, GPIO_INTR_DISABLE);
+	gpioSetup(GPIO_NUM_3, GPIO_MODE_INPUT, GPIO_PULLUP_ONLY, GPIO_INTR_DISABLE);
 
+	xTaskCreate(task_user_input, "gpio_task", 2048, &isButPressed, 10, NULL);
+
+	// xTaskCreate(task_user_input, "task_user_input", 2048, NULL, 10, NULL);
+	while (1){
+		if (isButPressed && x_pwmHandle == NULL){
+			xTaskCreate(pwm_task, "pwm_task", 2048, NULL, 10, &x_pwmHandle);
+		}
+		if (!isButPressed && x_pwmHandle != NULL){
+			vTaskDelete(x_pwmHandle);
+			x_pwmHandle = NULL;
+		}
+		vTaskDelay(10 / portTICK_PERIOD_MS);
+	}
+}
