@@ -21,5 +21,6 @@
 #define PWM_DUTY 50		   // PWM duty cycle in percentage (0-100)
 
 void pwm_task(void *arg);
+void updatePwm(uint16_t freqValue);
 
 #endif // _PWM_H_

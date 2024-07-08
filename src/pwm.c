@@ -28,3 +28,14 @@ void pwm_task( void *arg ) {
 		vTaskDelay(300 / portTICK_PERIOD_MS);
 	}
 }
+
+void updatePwm ( uint16_t freqValue ) {
+	if (freqValue == 0) {
+		ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 0);
+		ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
+	}
+	else {
+		ledc_set_freq(LEDC_LOW_SPEED_MODE, LEDC_TIMER_0, freqValue);
+		ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
+	}
+}
