@@ -35,12 +35,16 @@ From a past experience using the ESP32 as a microcontroller, and creating code f
 
 ---
 
+## Pinout
+
+![alt text](image.png)
+
+---
+
 ## Notes to self:
 
 With the hardware used, internal pullUp resistors seem to be a struggle, as the output generated on 3 different pins using such resistors results in an unknown behaviour. Using the internall pullDown offers the proper way to work with buttons, in an effeort to avoid using other components in the project. I want to test the issue with a different board of the same model and verify the issue persists.
 
 ---
-
-
 
 ---
