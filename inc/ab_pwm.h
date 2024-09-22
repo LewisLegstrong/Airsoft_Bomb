@@ -1,5 +1,5 @@
-#ifndef _PWM_H_
-#define _PWM_H_
+#ifndef _AB_PWM_H_
+#define _AB_PWM_H_
 
 #include <stdio.h>
 #include <inttypes.h>
